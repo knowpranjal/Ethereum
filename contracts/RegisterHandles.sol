@@ -7,17 +7,15 @@ contract HandleRegistry {
         string did;
     }
 
-    string s = "hassan";
 
-    // Mappings for efficient lookups
     mapping(string => string) public handleToDID; 
     mapping(string => string) public didToHandle;
 
-    // Arrays for indexing (keep track of registered handles/DIDs)
     string[] public registeredHandles;
     string[] public registeredDIDs;
 
     event HandleRegistered(string indexed _did, string indexed _handle);
+    
     event DIDRetrieved(string indexed _handle);
     event HandleRetrieved(string indexed _did);
 
@@ -34,16 +32,16 @@ contract HandleRegistry {
     }
 
     function getDIDFromHandle(string memory _handle) public view returns (string memory) {
-        // string memory did = handleToDID[_handle];
-        // require(bytes(did).length > 0, "Handle not found"); 
+        string memory did = handleToDID[_handle];
+        require(bytes(did).length > 0, "Handle not found"); 
         // emit DIDRetrieved(_handle);
-        return "sss";
+        return did;
     }
 
-    function getHandleFromDID(string memory _did) public returns (string memory) {
+    function getHandleFromDID(string memory _did) public view returns (string memory) {
         string memory handle = didToHandle[_did];
         require(bytes(handle).length > 0, "DID not found");
-        emit HandleRetrieved(_did);
+        // emit HandleRetrieved(_did);
         return handle;
     }
 
