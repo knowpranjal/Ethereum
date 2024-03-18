@@ -16,13 +16,13 @@ contract HandleRegistry {
     string[] public registeredDIDs;
 
     event HandleRegistered(string indexed _did, string indexed _handle);
+    event HandleTransferred(string indexed _newdid);
 
     event DIDRetrieved(string indexed _handle);
     event HandleRetrieved(string indexed _did);
 
     function registerHandle(string memory _handle, string memory _did) public {
-        require(bytes(handleToDID[_handle]).length == 0, "Handle already exists");
-        require(bytes(didToHandle[_did]).length == 0, "DID already exists");
+        require(bytes(handleToDID[_handle]).length == 0 && bytes(didToHandle[_did]).length == 0, "DID or handle already exists");
 
         handleToDID[_handle] = _did;
         didToHandle[_did] = _handle;
@@ -34,8 +34,8 @@ contract HandleRegistry {
 
     function transferHandle(string memory _handle, string memory _newDID) public {
 
-        require(bytes(handleToDID[_handle]).length > 0, "Handle not found");
-        require(bytes(didToHandle[_newDID]).length == 0, "New DID already exists");
+        require(bytes(handleToDID[_handle]).length > 0, "Handle doesn't exist, choose the registeration option");
+        require(bytes(didToHandle[_newDID]).length == 0, "new DID already exists");
 
         string memory oldDID = handleToDID[_handle];
 
@@ -49,6 +49,8 @@ contract HandleRegistry {
                 break;
             }
         }
+
+        emit HandleTransferred(_newDID);
 
     }
 
